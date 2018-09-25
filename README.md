@@ -1,3 +1,5 @@
+Forked from https://github.com/abisee/pointer-generator
+
 *Note: this code is no longer actively maintained. However, feel free to use the Issues section to discuss the code with other users. Some users have updated this code for newer versions of Tensorflow and Python - see information below and Issues section.*
 
 ---
