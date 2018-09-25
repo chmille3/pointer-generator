@@ -190,6 +190,7 @@ def run_training(model, batcher, sess_context_manager, sv, summary_writer):
       sess.add_tensor_filter("has_inf_or_nan", tf_debug.has_inf_or_nan)
     while True: # repeats until interrupted
       batch = batcher.next_batch()
+      print("Processing next batch...")
 
       tf.logging.info('running training step...')
       t0=time.time()
@@ -304,14 +305,14 @@ def main(unused_argv):
 
   tf.set_random_seed(111) # a seed value for randomness
 
-  if hps.mode == 'train':
+  if hps.mode.value == 'train':
     print "creating model..."
     model = SummarizationModel(hps, vocab)
     setup_training(model, batcher)
-  elif hps.mode == 'eval':
+  elif hps.mode.value == 'eval':
     model = SummarizationModel(hps, vocab)
     run_eval(model, batcher, vocab)
-  elif hps.mode == 'decode':
+  elif hps.mode.value == 'decode':
     decode_model_hps = hps  # This will be the hyperparameters for the decoder model
     decode_model_hps = hps._replace(max_dec_steps=1) # The model is configured with max_dec_steps=1 because we only ever run one step of the decoder at a time (to do beam search). Note that the batcher is initialized with max_dec_steps equal to e.g. 100 because the batches need to contain the full summaries
     model = SummarizationModel(decode_model_hps, vocab)
