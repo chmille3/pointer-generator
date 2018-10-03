@@ -1,5 +1,7 @@
 Forked from https://github.com/abisee/pointer-generator
 
+Working on conversion to Tensorflow 1.5 for GPU use.
+
 *Note: this code is no longer actively maintained. However, feel free to use the Issues section to discuss the code with other users. Some users have updated this code for newer versions of Tensorflow and Python - see information below and Issues section.*
 
 ---
