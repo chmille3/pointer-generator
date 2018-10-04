@@ -197,6 +197,15 @@ def print_results(article, abstract, decoded_output):
   tf.logging.info('GENERATED SUMMARY: %s', decoded_output)
   print ""
 
+  #CM 4/10/18 - Save article information to a file
+  FILE = open("articles.txt",'a+')
+  FILE.write("==================================================")
+  FILE.write("ARTICLE:" + article + '\n\n')
+
+  FILE.write("GENERATED SUMMARY:" + decoded_output + '\n\n')
+  FILE.write("==================================================")
+  FILE.close()
+
 
 def make_html_safe(s):
   """Replace any angled brackets in string s to avoid interfering with HTML attention visualizer."""
