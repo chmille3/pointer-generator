@@ -44,15 +44,15 @@ tf.app.flags.DEFINE_string('log_root', '', 'Root directory for all logging.')
 tf.app.flags.DEFINE_string('exp_name', '', 'Name for experiment. Logs will be saved in a directory with this name, under log_root.')
 
 # Hyperparameters
-#tf.app.flags.DEFINE_integer('hidden_dim', 256, 'dimension of RNN hidden states')
-tf.app.flags.DEFINE_integer('hidden_dim', 128, 'dimension of RNN hidden states')
-#tf.app.flags.DEFINE_integer('emb_dim', 128, 'dimension of word embeddings')
-tf.app.flags.DEFINE_integer('emb_dim', 64, 'dimension of word embeddings')
-#tf.app.flags.DEFINE_integer('batch_size', 16, 'minibatch size')
-tf.app.flags.DEFINE_integer('batch_size', 8, 'minibatch size')
+tf.app.flags.DEFINE_integer('hidden_dim', 256, 'dimension of RNN hidden states')
+tf.app.flags.DEFINE_integer('emb_dim', 128, 'dimension of word embeddings')
+tf.app.flags.DEFINE_integer('batch_size', 16, 'minibatch size')
+#tf.app.flags.DEFINE_integer('max_enc_steps', 400, 'max timesteps of encoder (max source text tokens)')
+#tf.app.flags.DEFINE_integer('max_dec_steps', 100, 'max timesteps of decoder (max summary tokens)')
 tf.app.flags.DEFINE_integer('max_enc_steps', 400, 'max timesteps of encoder (max source text tokens)')
 tf.app.flags.DEFINE_integer('max_dec_steps', 100, 'max timesteps of decoder (max summary tokens)')
 tf.app.flags.DEFINE_integer('beam_size', 4, 'beam size for beam search decoding.')
+#tf.app.flags.DEFINE_integer('min_dec_steps', 35, 'Minimum sequence length of generated summary. Applies only for beam search decoding mode')
 tf.app.flags.DEFINE_integer('min_dec_steps', 35, 'Minimum sequence length of generated summary. Applies only for beam search decoding mode')
 tf.app.flags.DEFINE_integer('vocab_size', 50000, 'Size of vocabulary. These will be read from the vocabulary file in order. If the vocabulary file contains fewer words than this number, or if this number is set to 0, will take all words in the vocabulary file.')
 tf.app.flags.DEFINE_float('lr', 0.15, 'learning rate')
@@ -308,14 +308,14 @@ def main(unused_argv):
 
   tf.set_random_seed(111) # a seed value for randomness
 
-  if hps.mode.value == 'train':
+  if hps.mode == 'train':
     print "creating model..."
     model = SummarizationModel(hps, vocab)
     setup_training(model, batcher)
-  elif hps.mode.value == 'eval':
+  elif hps.mode == 'eval':
     model = SummarizationModel(hps, vocab)
     run_eval(model, batcher, vocab)
-  elif hps.mode.value == 'decode':
+  elif hps.mode == 'decode':
     decode_model_hps = hps  # This will be the hyperparameters for the decoder model
     decode_model_hps = hps._replace(max_dec_steps=1) # The model is configured with max_dec_steps=1 because we only ever run one step of the decoder at a time (to do beam search). Note that the batcher is initialized with max_dec_steps equal to e.g. 100 because the batches need to contain the full summaries
     model = SummarizationModel(decode_model_hps, vocab)

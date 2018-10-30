@@ -84,8 +84,8 @@ class BeamSearchDecoder(object):
         assert FLAGS.single_pass, "Dataset exhausted, but we are not in single_pass mode"
         tf.logging.info("Decoder has finished reading dataset for single_pass.")
         tf.logging.info("Output has been saved in %s and %s. Now starting ROUGE eval...", self._rouge_ref_dir, self._rouge_dec_dir)
-        results_dict = rouge_eval(self._rouge_ref_dir, self._rouge_dec_dir)
-        rouge_log(results_dict, self._decode_dir)
+#        results_dict = rouge_eval(self._rouge_ref_dir, self._rouge_dec_dir)
+#        rouge_log(results_dict, self._decode_dir)
         return
 
       original_article = batch.original_articles[0]  # string
@@ -196,6 +196,15 @@ def print_results(article, abstract, decoded_output):
   tf.logging.info('REFERENCE SUMMARY: %s', abstract)
   tf.logging.info('GENERATED SUMMARY: %s', decoded_output)
   print ""
+
+  #CM 4/10/18 - Save article information to a file
+  FILE = open("articles.txt",'a+')
+  FILE.write("==================================================")
+  FILE.write("ARTICLE:" + article + '\n\n')
+
+  FILE.write("GENERATED SUMMARY:" + decoded_output + '\n\n')
+  FILE.write("==================================================")
+  FILE.close()
 
 
 def make_html_safe(s):
